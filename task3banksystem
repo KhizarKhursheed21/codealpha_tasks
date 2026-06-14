@@ -1,0 +1,148 @@
+BANK SYSTEM FUNCTIONS
+CODE:
+#include<iostream>
+#include<vector>
+#include<string>
+
+using namespace std;
+
+class Transaction{
+private:
+    string type;
+    double amount;
+
+public:
+    Transaction() {}
+
+    Transaction(string t,double a):type(t),amount(a){
+    }
+
+    void display()
+    {
+        cout<<type<<" : Rs."
+            <<amount<<endl;
+    }
+};
+
+class Account
+{
+private:
+    int accountNumber;
+    double balance;
+
+    vector<Transaction> history;
+
+public:
+    Account(){}
+
+    Account(int accNo,double bal=0):accountNumber(accNo),balance(bal){}
+
+    int getAccountNumber(){
+        return accountNumber;
+    }
+
+    double getBalance(){
+        return balance;
+    }
+
+    void deposit(double amount){
+        balance+=amount;
+
+        history.push_back(Transaction("Deposit",amount));
+    }
+
+    void withdraw(double amount){
+        if(amount>balance){
+            cout<<"Insufficient Balance\n";
+            return;
+        }
+
+        balance-=amount;
+
+        history.push_back(Transaction("Withdrawal",amount)
+        );
+    }
+
+    void transfer(Account &receiver, double amount)
+    {
+        if(amount>balance){
+            cout<<"Insufficient Balance\n";
+            return;
+        }
+
+        balance-=amount;
+        receiver.balance+=amount;
+
+        history.push_back(Transaction("Transfer Sent",amount)
+        );
+
+        receiver.history.push_back(Transaction("Transfer Received",amount)
+        );
+    }
+
+    void showTransactions(){
+        cout<<"\nTransaction History\n";
+
+        for(int i=0;i<history.size();i++){
+            history[i].display();
+        }
+    }
+
+    void displayAccount(){
+        cout<<"Account Number : "<<accountNumber<<endl;
+
+        cout<<"Balance : Rs: "<<balance<<endl;
+    }
+};
+
+class Customer{
+private:
+    int customerID;
+    string name;
+    Account account;
+
+public:
+    Customer(){}
+
+    Customer(int id,string n,int accNo): account(accNo){
+        customerID=id;
+        name=n;
+    }
+
+    Account& getAccount(){
+        return account;
+    }
+
+    void displayCustomer(){
+        cout<<"\nCustomer ID : "
+            <<customerID<<endl;
+
+        cout<<"Customer Name : "
+            <<name<<endl;
+
+        account.displayAccount();
+    }
+};
+
+int main(){
+    Customer c1(001,"Khizar",1001);
+    Customer c2(002,"umer",1002);
+
+    c1.getAccount().deposit(50000);
+
+    c1.getAccount().withdraw(20000);
+
+    c1.getAccount().transfer(c2.getAccount(),3000);
+
+    c1.displayCustomer();
+
+    c1.getAccount().showTransactions();
+
+    cout<<"\n";
+
+    c2.displayCustomer();
+
+    c2.getAccount().showTransactions();
+
+    return 0;
+}
