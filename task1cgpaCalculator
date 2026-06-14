@@ -1,0 +1,118 @@
+CGPA CALCULATOR:
+CODE:
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Course
+{
+private:
+    string name;
+    float grade;
+    int creditHours;
+
+public:
+    Course() {}
+
+    void input()
+    {
+        cout << "Course Name: ";
+        cin.ignore();
+        getline(cin, name);
+
+        cout << "Grade: ";
+        cin >> grade;
+
+        cout << "Credit Hours: ";
+        cin >> creditHours;
+    }
+
+    float getGradePoints()
+    {
+        return grade * creditHours;
+    }
+
+    void display()
+    {
+        cout << "\nCourse: " << getName()
+             << "\nGrade: " << getGrade()
+             << "\nCredit Hours: " << getcreditHours()
+             << "\nGrade Points: " << getGradePoints()
+             << endl;
+    }
+
+    int getcreditHours()
+    {
+        return creditHours;
+    }
+
+    string getName()
+    {
+        return name;
+    }
+
+    float getGrade()
+    {
+        return grade;
+    }
+};
+
+int main()
+{
+    int n;
+
+    cout << "Enter number of courses: ";
+    cin >> n;
+
+    Course courses[n];
+
+    float totalCredits = 0;
+    float totalGradePoints = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << "\nCourse " << i + 1 << endl;
+
+        courses[i].input();
+
+        totalCredits += courses[i].getcreditHours();
+        totalGradePoints += courses[i].getGradePoints();
+    }
+
+    cout << "\n\tCourse Details\n";
+
+    for (int i = 0; i < n; i++)
+    {
+        courses[i].display();
+    }
+
+    float semesterGPA = totalGradePoints / totalCredits;
+
+    cout << "\nFinal Semester GPA = "
+         << semesterGPA << endl;
+
+    int semesterCount;
+
+    cout << "\nEnter total semesters completed: ";
+    cin >> semesterCount;
+
+    float semesterGPAs[semesterCount];
+    float cgpaTotal = 0;
+
+    for (int i = 0; i < semesterCount; i++)
+    {
+        cout << "Enter SGPA of Semester "
+             << i + 1 << ": ";
+
+        cin >> semesterGPAs[i];
+
+        cgpaTotal += semesterGPAs[i];
+    }
+
+    float cgpa = cgpaTotal / semesterCount;
+
+    cout << "\nFinal CGPA = "
+         << cgpa << endl;
+
+    return 0;
+}
